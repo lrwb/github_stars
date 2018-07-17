@@ -18,7 +18,7 @@ class PythonProjects(BASE):
 
     id = Column(Integer, Sequence('python_projects_seq'), primary_key=True)
     repo_name = Column(String(64))
-    repo_id = Column(Integer)
+    repo_id = Column(Integer, unique=True)
     url = Column(String(128))
     creation_time = Column(DateTime)
     last_push_time = Column(DateTime)

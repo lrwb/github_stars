@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 # Package imports
 import database.models as models
+from database.models import PythonProjects
 
 
 class PythonProjectsDAO(object):
@@ -20,7 +21,7 @@ class PythonProjectsDAO(object):
         
         models.initialize(engine, self.session)
 
-    def save_python_projects(self, projects_list):
+    def save_python_projects_data(self, projects_list):
         '''
         Add python projects to the database
 
@@ -28,21 +29,48 @@ class PythonProjectsDAO(object):
             projects_list (list) - a list of PythonProject objects to add
                 to the database
         '''
-        self.session.add_all(projects_list)
-        self.session.commit()
+        # get existing python projects based on repo_id
+        repo_id_list = []
+        for project in projects_list:
+            repo_id_list.append(project.repo_id)
 
+        # if using postgres, should use an upsert statement, but I didn't
+        # want to stand up a postgres database for this
+        updates = self.session.query(PythonProjects) \
+            .filter(PythonProjects.repo_id.in_(repo_id_list))
 
-    def get_python_projects_values(self, value_list):
+        update_id_dict = {}
+        for up_date in updates:
+            update_id_dict[up_date.repo_id] = up_date.id
+
+        update_list = []
+        insert_list = []
+        for project in projects_list:
+            if project.repo_id not in list(update_id_dict.keys()):
+                insert_list.append(project)
+            else:
+                update_list.append(project)
+
+        # need to actually update the values retrieved from the database
+        for project in update_list:
+            project.id = update_id_dict.get(project.repo_name)
+
+        # add all new PythonProject Objects
+        self.session.add_all(insert_list)
+
+        self.session.commit()        
+        print("added {0} new records".format(len(insert_list)))
+
+    def get_python_projects_stats(self):
         '''
         Get the values in value_list for each project
 
-        Args:
-            value_list (list of strings) - columns to retrieve from the database
         Returns:
             The result list.
         '''
-        results = self.session.query(models.PythonProjects).all()
-        print(results)
-        #for name, last_push, stars in self.session.query(models.PythonProjects):
-        for name, last_push, stars in results:
-            print("{0}\t{1}\t{2}".format(name, last_push_stars))
+        results = self.session.query(PythonProjects).all()
+
+        for project in results:
+            print(project.repo_name)
+        print(len(results))
+        return results

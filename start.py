@@ -18,5 +18,5 @@ prepared_entries = ingest.prepare_database_entries(results)
 
 pp_dao = PythonProjectsDAO()
 
-#pp_dao.save_python_projects(prepared_entries)
-pp_dao.get_python_projects_values(['repo_name', 'last_push_time', 'stars'])
+pp_dao.save_python_projects_data(prepared_entries)
+db_results = pp_dao.get_python_projects_stats()
