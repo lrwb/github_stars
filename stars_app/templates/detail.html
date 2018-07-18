@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+        <h1>{{project.repo_name}}</h1>
+        <p><b>Repository ID:</b>   {{project.repo_id}}</p>
+        <p><b>Repository URL:</b>  {{project.url}}</p>
+        <p><b>Description:</b>     {{project.description}}</p>
+        <p><b>Creation Time:</b>   {{project.creation_time}}</p>
+        <p><b>Last Push Time:</b>  {{project.last_push_time}}</p>
+        <p><b>Stars:</b>           {{project.stars}}</p>
+{% endblock %}

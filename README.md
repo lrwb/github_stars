@@ -5,3 +5,7 @@ Create Installation Environment
 `$ source env3/bin/activate`
 `$ pip install -r requirements.txt`
 `$ deactivate`
+
+Start the Flask project
+`$ source settings.sh`
+`$ flask run`

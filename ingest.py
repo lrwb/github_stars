@@ -34,7 +34,6 @@ def get_github_python_stars(base_url):
 
     results_str = results.decode('utf-8')
     data = json.loads(results_str)
-    #data_obj = json.dumps(data, indent=4, sort_keys=True)
     data_items = data['items']
     print("There are {0} data items".format(len(data_items)))
 
@@ -42,12 +41,9 @@ def get_github_python_stars(base_url):
     for data_item in data_items:
         print('**************************************************')
         print(data_item.get('full_name'))   # repo full name
-        #print(data_item.get('id'))     # repo id
-        #print(data_item.get('url'))#  url
         print(data_item.get('created_at'))#  created date
         print(data_item.get('pushed_at'))#  last push date  ,this will likely update
-        #print(data_item.get('description'))#  description
-        #print(data_item.get('stargazers_count'))#  number of stars
+        print(data_item.get('stargazers_count'))#  number of stars
 
         item_results ={}
         item_results['repo_name'] = data_item.get('full_name')

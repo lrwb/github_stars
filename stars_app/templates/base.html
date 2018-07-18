@@ -1,0 +1,14 @@
+<html>
+    <head>
+        {% if title %}
+        <title>{{title}} - Popular Github Python Projects</title>
+        {% else %}
+        <title>Popular Github Python Projects</title>
+        {% endif %}
+    </head>
+    <body>
+        <div>Popular Python Projects:  <a href="/project">Home</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
