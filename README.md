@@ -50,3 +50,5 @@ constants module to make maintenance and updates easier.
 
 Pagination is not implemented because the github api returns the top 30
 starred results.  This number is reasonable.
+
+Unit tests need to be added as well.
