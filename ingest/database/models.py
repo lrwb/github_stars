@@ -9,7 +9,6 @@ from sqlalchemy.ext.declarative import declarative_base
 BASE = declarative_base()
 
 def  initialize(engine, session):
-#    BASE.query = session.query_property()
     BASE.metadata.create_all(engine)
 
 class PythonProjects(BASE):
@@ -26,4 +25,13 @@ class PythonProjects(BASE):
     stars = Column(Integer)
 
     def __repr__(self):
-        return "<PythonProjects(repo_name='{0}', repo_id='{1}', url='{2}', creation_time='{3}', last_push_time='{4}', description='{5}', stars='{6}')>".format(self.repo_name, self.repo_id, self.url, self.creation_time, self.last_push_time, self.description, self.stars) 
+        return ("<PythonProjects(repo_name='{0}', repo_id='{1}', url='{2}', "
+                "creation_time='{3}', last_push_time='{4}', description='{5}', "
+                "stars='{6}')>"
+                .format(self.repo_name,
+                        self.repo_id,
+                        self.url,
+                        self.creation_time,
+                        self.last_push_time,
+                        self.description,
+                        self.stars))

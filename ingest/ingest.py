@@ -7,7 +7,7 @@ import urllib.request as request
 # Third party imports
 
 # Package imports
-import database.models as models
+import ingest.database.models as models
 
 
 def get_github_python_stars(base_url):

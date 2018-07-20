@@ -6,8 +6,8 @@ import urllib.request as request
 # Third party imports
 
 # Package imports
-from database.DAO import PythonProjectsDAO
-import ingest
+from ingest.database.DAO import PythonProjectsDAO
+from ingest import ingest
 
 
 # This should be a config file or command line argument
