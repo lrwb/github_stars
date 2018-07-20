@@ -1,3 +1,6 @@
+'''
+Database access methods used by the Flask app.
+'''
 # Python imports
 
 # Third party imports
@@ -8,13 +11,16 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 # Package imports
 
 ENGINE = create_engine('sqlite:///github.db')
-db_session = scoped_session(sessionmaker(autocommit=False,
+DB_SESSION = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=ENGINE))
 BASE = declarative_base()
-BASE.query = db_session.query_property()
+BASE.query = DB_SESSION.query_property()
 
 def  init_db():
+    '''
+    Initialize the database to the definitions in the models module.
+    '''
     import stars_app.models
     BASE.metadata.create_all(ENGINE)
 
@@ -24,6 +30,9 @@ from stars_app.models import PythonProjects
 def get_names_and_ids():
     '''
     Get the project names and repo ids.
+
+    Return:
+        A list of lists correlating repo_name and repo_id, [[repo_name, repo_id]]
     '''
     results = PythonProjects.query.all()
     result_list = []
@@ -45,7 +54,7 @@ def get_project_details(repo_id):
         The full project details for the project matching the given repo_id.
     '''
     results = PythonProjects.query \
-                          .filter(PythonProjects.repo_id==repo_id) \
+                          .filter(PythonProjects.repo_id == repo_id) \
                           .first()
 
     return  results

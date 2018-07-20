@@ -1,1 +1,1 @@
-from stars_app import app
+from stars_app import APP

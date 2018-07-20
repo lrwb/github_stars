@@ -1,7 +1,7 @@
+'''
+Run the ingest script to save new results and udpates to the database.
+'''
 # Python imports
-import json
-import urllib.parse as parse
-import urllib.request as request
 
 # Third party imports
 
@@ -13,9 +13,9 @@ from ingest import ingest
 # This should be a config file or command line argument
 URL = 'https://api.github.com/search/repositories'
 
-results = ingest.get_github_python_stars(URL)
-prepared_entries = ingest.prepare_database_entries(results)
+RESULTS = ingest.get_github_python_stars(URL)
+PREPARED_ENTRIES = ingest.prepare_database_entries(RESULTS)
 
-pp_dao = PythonProjectsDAO()
+PP_DAO = PythonProjectsDAO()
 
-pp_dao.save_python_projects_data(prepared_entries)
+PP_DAO.save_python_projects_data(PREPARED_ENTRIES)

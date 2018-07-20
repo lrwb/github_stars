@@ -1,16 +1,21 @@
+'''
+Define  the endpoints of the API.
+
+Route the data from the database to the correct template.
+'''
 # Python package imports
 
 # Third party package imports
 from flask import render_template
 
 # Package imports
-from stars_app import app
+from stars_app import APP
 import stars_app.database as dao
 
 dao.init_db()
 
-@app.route('/')
-@app.route('/project', methods=['GET'])
+@APP.route('/')
+@APP.route('/project', methods=['GET'])
 def index():
     '''
     Render a list of projects via HTML.
@@ -19,7 +24,7 @@ def index():
 
     return render_template('index.html', projects=result_list)
 
-@app.route('/project/<int:repo_id>', methods=['GET'])
+@APP.route('/project/<int:repo_id>', methods=['GET'])
 def get_details(repo_id):
     '''
     Render the details of a specific project.

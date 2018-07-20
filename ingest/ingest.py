@@ -1,13 +1,16 @@
+'''
+Ingest data at the defined API with the expected structure.
+'''
 # Python imports
 from datetime import datetime
 import json
-import urllib.parse as parse
-import urllib.request as request
+import urllib.parse
+import urllib.request
 
 # Third party imports
 
 # Package imports
-import ingest.database.models as models
+from ingest.database.models import PythonProjects
 
 
 def get_github_python_stars(base_url):
@@ -21,15 +24,15 @@ def get_github_python_stars(base_url):
         'q': 'language:python',
         'sort': 'stars',
         'order': 'desc'
-        } 
+        }
 
-    query_params = parse.urlencode(values)
+    query_params = urllib.parse.urlencode(values)
 
     full_req = base_url + '?' + query_params
 
     # Ideally, this is a debug or info level log statement
     print(full_req)
-    with request.urlopen(full_req) as response:
+    with urllib.request.urlopen(full_req) as response:
         results = response.read()
 
     results_str = results.decode('utf-8')
@@ -45,7 +48,7 @@ def get_github_python_stars(base_url):
         print(data_item.get('pushed_at'))#  last push date  ,this will likely update
         print(data_item.get('stargazers_count'))#  number of stars
 
-        item_results ={}
+        item_results = {}
         item_results['repo_name'] = data_item.get('full_name')
         item_results['repo_id'] = data_item.get('id')
         item_results['url'] = data_item.get('url')
@@ -62,23 +65,26 @@ def get_github_python_stars(base_url):
     return top_results
 
 def prepare_database_entries(items):
+    '''
+    Create PythonProjects objects to store in the database.
+
+    Args:
+        items (list of dictionaries) - list of dictionary items to convert
+            to PythonProjects items.
+    Returns:
+        A list of PythonProjects class objects.
+    '''
     entries = []
     for result in items:
-        db_entry = models.PythonProjects(
-        repo_name = result.get('repo_name'),
-        repo_id = result.get('repo_id'),
-        url = result.get('url'),
-        creation_time = result.get('creation_time'),
-        last_push_time = result.get('last_push_time'),
-        description = result.get('description'),
-        stars = result.get('stars'))
+        db_entry = PythonProjects(
+            repo_name=result.get('repo_name'),
+            repo_id=result.get('repo_id'),
+            url=result.get('url'),
+            creation_time=result.get('creation_time'),
+            last_push_time=result.get('last_push_time'),
+            description=result.get('description'),
+            stars=result.get('stars'))
+
         entries.append(db_entry)
 
     return entries
-
-if __name__ == '__main__':
-    # This should be a config file or command line argument
-    URL = 'https://api.github.com/search/repositories'
-
-    results = get_github_python_stars(URL)
-    prepared_entries = prepare_database_entries(results)

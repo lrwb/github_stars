@@ -1,3 +1,6 @@
+'''
+Model definitions of the database tables.
+'''
 # Python imports
 
 # Third party imports
@@ -8,10 +11,16 @@ from sqlalchemy.ext.declarative import declarative_base
 
 BASE = declarative_base()
 
-def  initialize(engine, session):
+def  initialize(engine):
+    '''
+    Initialize the database.
+    '''
     BASE.metadata.create_all(engine)
 
 class PythonProjects(BASE):
+    '''
+    Define the python_projects table.
+    '''
     # name should be placed in a constants file
     __tablename__ = 'python_projects'
 
