@@ -4,31 +4,30 @@
 from flask import render_template
 
 # Package imports
-#from database.DAO import PythonProjectsDAO
 from stars_app import app
-from stars_app.database import init_db
-from stars_app.models import PythonProjects
+import stars_app.database as dao
 
-init_db()
-
-#dao = PythonProjectsDAO()
+dao.init_db()
 
 @app.route('/')
 @app.route('/project', methods=['GET'])
 def index():
-    results = PythonProjects.query.all()
-    result_list = []
-    for result in results:
-        result_dict = {}
-        result_dict['repo_name'] = result.repo_name
-        result_dict['repo_id'] = result.repo_id
-        result_list.append(result_dict)
+    '''
+    Render a list of projects via HTML.
+    '''
+    result_list = dao.get_names_and_ids()
 
     return render_template('index.html', projects=result_list)
 
 @app.route('/project/<int:repo_id>', methods=['GET'])
 def get_details(repo_id):
-    results = PythonProjects.query \
-                          .filter(PythonProjects.repo_id==repo_id) \
-                          .first()
+    '''
+    Render the details of a specific project.
+
+    Args:
+        repo_id (int) - An id that should match a repo_id in the
+            python_projects table.
+    '''
+    results = dao.get_project_details(repo_id)
+
     return render_template('detail.html', project=results)
