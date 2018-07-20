@@ -3,7 +3,7 @@
 # Third party imports
 from sqlalchemy import create_engine, and_
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import load_only, sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 # Package imports
 import ingest.database.models as models
@@ -15,7 +15,9 @@ class PythonProjectsDAO(object):
     def __init__(self):
         engine = create_engine('sqlite:///github.db')
 
-        Session = sessionmaker(bind=engine)
+        Session = scoped_session(sessionmaker(autocommit=False,
+                                              autoflush=False,
+                                              bind=engine))
         self.session = Session()
         
         models.initialize(engine, self.session)
